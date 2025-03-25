@@ -19,9 +19,12 @@ import AuthProvider from "./services/auth/auth.context.jsx";
 import FinancialDashboard from "./screens/FinancialDashboard.jsx";
 import { AccountProvider } from "./services/account/account.context.jsx";
 import UserMatchDetails from "./screens/UserMatchDetails.jsx";
+import MarketAnalysis from "./components/Rossan/MarketAnalysis.jsx";
+import ListMarket from "./components/Rossan/ListMarket.jsx";
+
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <AuthProvider>
       <AccountProvider>
         <Router>
@@ -60,5 +63,5 @@ createRoot(document.getElementById("root")).render(
         </Router>
       </AccountProvider>
     </AuthProvider>
-  </StrictMode>
+  // {/* </StrictMode> */}
 );
