@@ -9,7 +9,7 @@ const App = () => {
   
    
 
-  return isAuthenticated ? <HomeScreen /> : <LoginPage />;
+  return isAuthenticated ? <HomeScreen /> : <LoginPage />
 };
 
 export default App;
