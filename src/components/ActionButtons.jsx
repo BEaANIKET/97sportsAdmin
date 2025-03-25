@@ -18,7 +18,7 @@ const ICONS = {
   MdOutlineVpnLock,
 };
   
-const ActionButtons = memo(({ actions }) => {
+const ActionButtons = memo(({ actions,fs_id }) => {
   const navigate= useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGr, setGr] = useState(null);

@@ -33,7 +33,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path='/dashboard' element={<DashBoard />} />
           <Route path='/password-history' element={<PasswordChangeHistory />} />
-          <Route path='/account/:id' element={<AccountDashboard />} />
+          <Route path='/account' element={<AccountDashboard />} />
           <Route path='/commission' element={<CommissionTable />} />
           <Route path='/betting' element={<BettingHistoryTable />} />
           <Route path='/profit-loss' element={<ProfitLossTable />} />

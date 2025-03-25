@@ -16,16 +16,19 @@ const AccountDetails = ({ profileData }) => {
       .replace(/^./, (str) => str.toUpperCase());
   };
 
+  const [searchParams]= useSearchParams();
+  const _id= searchParams.get('fs_id');
+
   useEffect(() => {
     const getData= async() => {
-      const result= await axios.post('https://admin.titan97.live/Apicall/myprofile', { user_id: _id })
+      const user= JSON.parse(localStorage.getItem('user'));
+      console.log('user',user);
+      const result= await axios.post('https://admin.titan97.live/Apicall/myprofile', { user_id: (_id || user.user_id) })
+      console.log(result.data);
       setProfile(result.data.profile_info);
     }
     getData();
   }, [])
-
-  const [searchParams]= useSearchParams();
-  const _id= searchParams.get('fs_id');
 
   const [profile, setProfile]= useState(null);
 
