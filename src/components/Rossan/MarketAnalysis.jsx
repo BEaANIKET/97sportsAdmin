@@ -14,6 +14,7 @@ import {
 import toast from "react-hot-toast";
 // import { socket } from "../main";
 import {io} from "socket.io-client"
+import LiveStreaming from "./LiveStreaming";
 const socket = io("https://titan97.live");
 const MarketAnalysis = () => {
   const params = useParams()
@@ -232,7 +233,7 @@ const MarketAnalysis = () => {
 
       {/* Tabs */}
       <div className="flex overflow-x-scroll scroll-smooth w-full gap-1 p-2 text-white bg-gray-200 border-b border-gray-300">
-        {apiData?.map((tab) => (
+        {apiData?.map((tab, indexx) => (
           <button
             key={tab}
             className={`p-2 font-bold border-1 text-nowrap border-black rounded-4xl text-sm ${
@@ -319,15 +320,21 @@ const MarketAnalysis = () => {
                                   )
                                 }
                                 className="w-full bg-transparent"
-                              >
-                                <div className="bg-[#72bbef] text-center font-bold">
-                                  {item.odds[item.odds.length / 2 - 1]?.odds}
+                              > 
+                              {/* {
+                                item?.odds?.otype === "back" &&  <> */}
+                                 <div className="bg-[#72bbef] text-center font-bold">
+                                {item.odds[item.odds.length / 2 - 1]?.odds}
 
-                                  {/* {item.odds.length / 2} */}
-                                </div>
-                                <div className="bg-[#72bbef] text-center">
-                                  {item.odds[item.odds.length / 2 - 1]?.size}
-                                </div>
+                                {/* {item.odds.length / 2} */}
+                              </div>
+                              <div className="bg-[#72bbef] text-center">
+                                {item.odds[item.odds.length / 2 - 1]?.size}
+                              </div> 
+                              {/* </> 
+                              } */}
+                              
+                                
                               </button>
                               <button
                                 onClick={() =>
@@ -503,7 +510,7 @@ const MarketAnalysis = () => {
             </div>
           ))
         : null}
-
+      <LiveStreaming gmid={id}/>
       {/* <AgeVerificationModal
         isOpen={showAgeVerificationModal}
         onConfirm={() => {
