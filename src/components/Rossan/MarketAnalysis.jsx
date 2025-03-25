@@ -16,13 +16,13 @@ import toast from "react-hot-toast";
 import {io} from "socket.io-client"
 const socket = io("https://titan97.live");
 const MarketAnalysis = () => {
-  
+  const params = useParams()
   const [activeTab, setActiveTab] = useState("Winner");
   const [activeSection, setActiveSection] = useState("Winner");
   const [apiData, setApiData] = useState([]);
   const tabs = ["All", "Popular", "Winner", "Bookmakers"];
   const [loder, setLoader] = useState(false);
-  const id  = "504522655";
+  const id  = params.id;
   const [searchParams] = useSearchParams();
   const sid = "4";
   const match_name = searchParams.get("match_name");

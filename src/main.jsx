@@ -41,7 +41,7 @@ createRoot(document.getElementById("root")).render(
           <Route path='/restore-user' element={<RestoreUserTable />} />
           <Route path='/user-banking' element={<FinancialTable />} />
           <Route path='/market-analysis' element={<ListMarket />} />
-          <Route path='/MarketDetail' element={<MarketAnalysis />} />
+          <Route path='/MarketDetail/:id' element={<MarketAnalysis />} />
           <Route path='/master-banking' element={<FinancialTable />} />
           <Route path='/list/user' element={<FinancialDashboard />} />
           <Route path='/list/master' element={<FinancialDashboard />} />
