@@ -16,10 +16,11 @@ import { getFinancialCol } from "../utils/columns";
 import CreditModal from "../components/Modal/credit/CreditModal";
 
 import { getDownLineData } from "../services/account/account.service";
-import { getButtonTitle, getUserType, getUserTypeCode } from "../utils/user_type_converter";
-
-
-
+import {
+  getButtonTitle,
+  getUserType,
+  getUserTypeCode,
+} from "../utils/user_type_converter";
 
 const FinancialDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -27,7 +28,7 @@ const FinancialDashboard = () => {
   const [isCreditModalOpen, setIsCreditModalOpen] = useState(false);
   const [isSummaryChecked, setIsSummaryChecked] = useState(false);
 
-  const [  isNested , setIsNested ] = useState(false);
+  const [isNested, setIsNested] = useState(false);
 
   const location = useLocation();
   const userRoute = location.pathname.split("/").pop();
@@ -35,7 +36,6 @@ const FinancialDashboard = () => {
   // for display the data of that user type
   const buttonTitle = getButtonTitle(userRoute);
   const userTypeCode = getUserTypeCode(userRoute);
-
 
   // financial summary data
   const [data, setData] = useState({
@@ -48,15 +48,21 @@ const FinancialDashboard = () => {
   });
 
   const { user } = useContext(AuthContext);
-  const { onCreateChild, error, downlineData, onGetDownLineData , setDeletedUserStatus , deletedUserStatus , onDeleteUser} =
-    useContext(AccountContext);
+  const {
+    onCreateChild,
+    error,
+    downlineData,
+    onGetDownLineData,
+    setDeletedUserStatus,
+    deletedUserStatus,
+    onDeleteUser,
+  } = useContext(AccountContext);
 
   const handleSubmit = async (formData) => {
     try {
       const responseData = await onCreateChild({
         ...formData,
         parent_id: user.user_id,
-     
       });
 
       if (responseData) {
@@ -66,7 +72,7 @@ const FinancialDashboard = () => {
         toast.error(error || "Failed to create child account");
       }
     } catch (err) {
-      toast.error("Failed to create child account",err);
+      toast.error("Failed to create child account", err);
     }
   };
 
@@ -77,15 +83,13 @@ const FinancialDashboard = () => {
       } else {
         toast.error(deletedUserStatus.message);
       }
-      setTimeout(setDeletedUserStatus(null),1000)
+      setTimeout(setDeletedUserStatus(null), 1000);
     }
-  }, [deletedUserStatus,setDeletedUserStatus])
+  }, [deletedUserStatus, setDeletedUserStatus]);
 
   useEffect(() => {
     const fetchDownLineData = async () => {
       if (user?.user_id && !isNested) {
-       
-        
         try {
           await onGetDownLineData(user.user_id, userTypeCode);
         } catch (error) {
@@ -93,19 +97,17 @@ const FinancialDashboard = () => {
         }
       }
     };
-  
+
     fetchDownLineData();
   }, [user?.user_id, userTypeCode, isNested]);
-  
+
   useEffect(() => {
     if (downlineData) {
       setUsers(downlineData);
     }
   }, [downlineData]);
 
-  const userNow = getUserType(user?.user_type)
-  
-  
+  const userNow = getUserType(user?.user_type);
 
   // Table State
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -114,55 +116,90 @@ const FinancialDashboard = () => {
   const [sortField, setSortField] = useState("username");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  // testing 
+  // testing
   const [selectedUserId, setSelectedUserId] = useState(null);
-  let actionsConfig ;
+  let actionsConfig;
 
   if (!isNested) {
     actionsConfig = {
-      payment: { icon: "DollarSign", onClick: (row) => handlePayment(row), color: "gray" },
-      swap: { icon: "ArrowUpDown", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      profile: { icon: "User", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      something: { icon: "GrSchedulePlay", onClick: (row) => console.log("Lock:", row), color: "gray" },
-      settings: { icon: "Settings", onClick: (row) => console.log("Settings:", row), color: "gray" },
-      lock: { icon: "Lock", onClick: (row) => console.log("Lock:", row), color: "gray" },
+      payment: {
+        icon: "DollarSign",
+        onClick: (row) => handlePayment(row),
+        color: "gray",
+      },
+      swap: {
+        icon: "ArrowUpDown",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      profile: {
+        icon: "User",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      something: {
+        icon: "GrSchedulePlay",
+        onClick: (row) => console.log("Lock:", row),
+        color: "gray",
+      },
+      settings: {
+        icon: "Settings",
+        onClick: (row) => console.log("Settings:", row),
+        color: "gray",
+      },
+      lock: {
+        icon: "Lock",
+        onClick: (row) => console.log("Lock:", row),
+        color: "gray",
+      },
       delete: {
         icon: "Trash2",
         onClick: (row) => handleDeleteUser(row.fs_id),
         color: "red",
       },
-      vpnlock: { icon: "MdOutlineVpnLock", onClick: (row) => console.log("Lock:", row), color: "gray" },
+      vpnlock: {
+        icon: "MdOutlineVpnLock",
+        onClick: (row) => console.log("Lock:", row),
+        color: "gray",
+      },
     };
-    
-  }
-  else{
+  } else {
     actionsConfig = {
-      swap: { icon: "ArrowUpDown", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      profile: { icon: "User", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      something: { icon: "GrSchedulePlay", onClick: (row) => console.log("Lock:", row), color: "gray" },
-    }
+      swap: {
+        icon: "ArrowUpDown",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      profile: {
+        icon: "User",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      something: {
+        icon: "GrSchedulePlay",
+        onClick: (row) => console.log("Lock:", row),
+        color: "gray",
+      },
+    };
   }
-   
-  // Function to handle user deletion
-const handleDeleteUser = async (user_id) => {
- 
-  await onDeleteUser(user_id);
-  await getDownLineData(user.user_id , userTypeCode);
-  
-};
 
-const handlePayment = (row)=>{
-  setSelectedUserId(row);
-  setIsCreditModalOpen(true);
-}
+  // Function to handle user deletion
+  const handleDeleteUser = async (user_id) => {
+    await onDeleteUser(user_id);
+    await getDownLineData(user.user_id, userTypeCode);
+  };
+
+  const handlePayment = (row) => {
+    setSelectedUserId(row);
+    setIsCreditModalOpen(true);
+  };
 
   const FINANCIAL_DASHBOARD_COL = getFinancialCol(actionsConfig);
 
-  const handleSort =(field)=>{
-
+  const handleSort = (field) => {
     setSortField(field);
-    setSortDirection(sortDirection === "asc"? "desc" : "asc");
-  }
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  };
 
   // **Apply Filtering, Sorting, and Pagination in Sequence**
   const filteredUsers = filterData(users, searchTerm);
@@ -175,8 +212,12 @@ const handlePayment = (row)=>{
 
   return (
     <div className="bg-gray-100 p-4 min-h-screen">
-     
-      <ToastContainer position="top-center" autoClose={5000} theme="light"  bodyClassName="text-sm sm:text-base"/>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        theme="light"
+        bodyClassName="text-sm sm:text-base"
+      />
       <div className="bg-white rounded-lg shadow-md p-6">
         {/* Top Action Buttons */}
         <div className="flex justify-end mb-4">
@@ -208,10 +249,10 @@ const handlePayment = (row)=>{
 
         {/* Summary Cards */}
         <FinancialSummary data={data} />
-   
+
         {/* Table */}
         <DataTable
-           columns={FINANCIAL_DASHBOARD_COL}
+          columns={FINANCIAL_DASHBOARD_COL}
           rowKey={buttonTitle}
           data={currentUsers}
           entriesPerPage={entriesPerPage}
@@ -236,11 +277,11 @@ const handlePayment = (row)=>{
         onSubmit={handleSubmit}
       />
 
-<CreditModal
+      <CreditModal
         isOpen={isCreditModalOpen}
         onClose={() => setIsCreditModalOpen(false)}
-       selectedUserId={selectedUserId}
-       userTypeCode={userTypeCode}
+        selectedUserId={selectedUserId}
+        userTypeCode={userTypeCode}
       />
     </div>
   );

@@ -1,81 +1,132 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
+import CommissionModal from "../components/Rossan/CommissionModal";
+import PasswordModal from "../components/Rossan/PasswordModal";
+import MobileModal from "../components/Rossan/MobileModal";
+import ExposureModal from "../components/Rossan/ExposureModal";
+import { useSearchParams } from "react-router";
+import axios from "axios";
+import RollingCommissionModal from "../components/Rossan/RollingCommissionModal";
 
 const AccountDetails = ({ profileData }) => {
   const formatLabel = (label) => {
     return label
-      .replace(/([A-Z])/g, " $1") 
-      .replace(/_/g, " ") 
+      .replace(/([A-Z])/g, " $1")
+      .replace(/_/g, " ")
       .replace(/^./, (str) => str.toUpperCase());
   };
- profileData = {
-      name: 'demo8956',
-      commission: '0',
-      rollingCommission: 'View',
-      agentRollingCommission: 'View',
-      currency: 'IRP',
-      partnership: '100',
-      mobileNumber: 'Not found',
-      password: '**********'
-    };
-  
+
+  useEffect(() => {
+    const getData= async() => {
+      const result= await axios.post('https://admin.titan97.live/Apicall/myprofile', { user_id: _id })
+      setProfile(result.data.profile_info);
+    }
+    getData();
+  }, [])
+
+  const [searchParams]= useSearchParams();
+  const _id= searchParams.get('fs_id');
+
+  const [profile, setProfile]= useState(null);
+
+  const [commissionPopup, setCommissionPopup] = useState(false);
+  const [passwordPopup, setPasswordPopup] = useState(false);
+  const [mobilePopup, setMobilePopup] = useState(false);
+  const [exposurePopup, setExposurePopup] = useState(false)
+  const [rollingCommissionPopup, setRollingCommissionPopup] = useState(false);
+
+  profileData = [
+    {
+      key: "name",
+      value: profile?.user_id || "demo8956",
+    },
+    {
+      key: "commission",
+      value: profile?.match_commission || "0",
+      icon: "editCommission",
+    },
+    {
+      key: "rollingCommission",
+      value: profile?.session_commission || "0",
+      icon: "editRollingCommission",
+    },
+    {
+      key: "currency",
+      value: "IRP",
+    },
+    {
+      key: "exposure",
+      value: profile?.min_sports_exp,
+      icon: "editExposure",
+    },
+    {
+      key: "mobileNumber",
+      value: profile?.supplier_mobile || "Not found",
+      icon: "editMobileNumber",
+    },
+    {
+      key: "password",
+      value: "**********",
+      icon: "editPassword",
+    },
+  ];
+
+  const handleClick = (clickContent) => {
+    switch (clickContent) {
+      case "editCommission": setCommissionPopup(true);
+        return;
+      case "editRollingCommission": setRollingCommissionPopup(true);
+        return;
+      case "editExposure": setExposurePopup(true);
+        return;
+      case "editMobileNumber": setMobilePopup(true);
+        return;
+      case "editPassword": setPasswordPopup(true);
+        return;
+    }
+  };
+
+  const onClose = () => {
+    setCommissionPopup(false);
+    setPasswordPopup(false);
+    setMobilePopup(false)
+    setExposurePopup(false);
+  };
 
   return (
     <div className="bg-white w-full">
-      <div className="bg-gray-800 text-white p-4 font-bold">Account Details</div>
+      <div className="bg-gray-800 text-white p-4 font-bold">
+        Account Details
+      </div>
       <div className="divide-y">
-        {Object.entries(profileData).map(([key, value], index) => (
+        {profileData.map((item, index) => (
           <div key={index} className="flex flex-col sm:flex-row p-4 border-b">
-            <div className="font-semibold w-full sm:w-1/4 mb-2 sm:mb-0">{formatLabel(key)}</div>
-            <div className="w-full sm:w-3/4 flex items-center">
-              {value === "View" ? (
+            <div className="font-semibold w-full sm:w-1/4 mb-2 sm:mb-0">
+              {formatLabel(item.key)}
+            </div>
+            <div className="w-full sm:w-3/4 flex items-center gap-2">
+              <span>{item.value}</span>
+              {item.icon && (
                 <div className="flex items-center space-x-2">
-                  <span>{value}</span>
-                  <svg
-                    className="w-5 h-5 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    ></path>
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    ></path>
-                  </svg>
+                  <FaRegEdit onClick={() => handleClick(item.icon)} />
                 </div>
-              ) : key === "password" ? (
-                <div className="flex items-center space-x-2">
-                  <span>{value}</span>
-                  <svg
-                    className="w-5 h-5 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    ></path>
-                  </svg>
-                </div>
-              ) : (
-                <span>{value}</span>
               )}
             </div>
           </div>
         ))}
       </div>
+      
+     
+
+      {commissionPopup && <CommissionModal onClose={onClose} user_id={_id} setProfile={setProfile} setCommissionPopup={setCommissionPopup}/>}
+
+      {rollingCommissionPopup && <RollingCommissionModal onClose={onClose} user_id={_id} setProfile={setProfile} setRollingCommissionPopup={setRollingCommissionPopup}/>}
+      
+      {passwordPopup &&  <PasswordModal onClose={onClose} user_id={_id} setProfile={setProfile} setPasswordPopup={setPasswordPopup}/>}
+
+      {mobilePopup && <MobileModal onClose={onClose} user_id={_id} setProfile={setProfile} setMobilePopup={setMobilePopup}/>}
+
+      {exposurePopup && <ExposureModal name={profile?.user_id } curntValue={profile?.min_sports_exp} onClose={onClose} user_id={_id} setProfile={setProfile} setExposurePopup={setExposurePopup}/>}
     </div>
   );
 };
