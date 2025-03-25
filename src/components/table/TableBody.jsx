@@ -82,7 +82,6 @@ const TableBody = ({ data, columns, rowKey , userTypeCode , setIsNested , isNest
                   <td
                     key={`${key}-${colIndex}`}
                     className="border border-gray-300 p-2 text-right"
-                    
                   >
                    {actionsConfig ? (
                     <ActionButtons actions={actionsConfig(row)} />

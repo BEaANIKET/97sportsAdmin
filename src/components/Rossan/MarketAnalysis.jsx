@@ -194,8 +194,13 @@ const MarketAnalysis = () => {
     });
   };
 
-  const handleBetAmountChange = (amount) => {
-    setBetAmount(amount);
+  const handleBetAmountChange = async(amount) => {
+    try {
+      const response = await axios.post()
+      setBetAmount(amount);
+    } catch (error) {
+      
+    }
   };
 
   const closeModal = () => {
@@ -414,6 +419,7 @@ const MarketAnalysis = () => {
                                     className="p-2 text-center w-full border-r border-l border-[#aaaaaa] bg-gray-100"
                                     readOnly
                                   />
+                                  {/* <iframe style={{width: "100vw", height: "100vh"}} src="" frameborder="0"></iframe> */}
                                   <button
                                     // onClick={() =>
                                     //   setBetAmount(betAmount + 0.01)

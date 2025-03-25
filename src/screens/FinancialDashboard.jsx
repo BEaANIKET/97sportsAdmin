@@ -182,7 +182,7 @@ const handleGrStatus = (row) => {
   }
   return (
     <>
-    <div className="bg-gray-100 p-4 min-h-screen">
+    <div className="bg-gray-100 p-1 min-h-screen">
      
      <ToastContainer position="top-center" autoClose={5000} theme="light"  bodyClassName="text-sm sm:text-base"/>
      <div className="bg-white rounded-lg shadow-md p-6">
