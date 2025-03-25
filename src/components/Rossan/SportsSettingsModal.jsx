@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import RadioBtn from './RadioBtn';
+
 const SportsSettingsModal = ({onClose}) => {
   // Initial sports data with checked status
   const [sports, setSports] = useState([
@@ -13,16 +15,20 @@ const SportsSettingsModal = ({onClose}) => {
     { id: 8, name: 'Lottery', checked: false },
   ]);
 
+
   // Toggle sport selection
   const toggleSport = (id) => {
-    setSports(sports.map(sport => 
-      sport.id === id ? { ...sport, checked: !sport.checked } : sport
-    ));
+    setSports((prevSports) =>
+      prevSports.map((sport) =>
+        sport.id === id ? { ...sport, checked: !sport.checked } : sport
+      )
+    );
   };
 
   return (
     <div className="fixed inset-0 p-2 flex  justify-center top-0 z-20">
-      <div className="w-full max-w-lg h-[450px] bg-white shadow-lg rounded-sm overflow-hidden">
+
+      <div className="w-full max-w-lg h-[430px] bg-white shadow-lg rounded-sm overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center bg-blue-900 text-white px-4 py-3">
           <h2 className="text-lg font-bold">Sports Settings</h2>
@@ -45,7 +51,9 @@ const SportsSettingsModal = ({onClose}) => {
                   <td className="border border-gray-300 px-4 py-2">{sport.id}</td>
                   <td className="border border-gray-300 px-4 py-2">{sport.name}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <div 
+
+                   { /* <div 
+
                       className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer ${
                         sport.checked ? 'bg-blue-900' : 'bg-gray-300'
                       }`}
@@ -56,7 +64,16 @@ const SportsSettingsModal = ({onClose}) => {
                           sport.checked ? 'translate-x-6' : ''
                         }`}
                       ></div>
+
                     </div>
+
+                    </div> */}
+
+                    <RadioBtn 
+                    isChecked={sport.checked}
+                    setIsChecked={() => toggleSport(sport.id)}
+                    />
+
                   </td>
                 </tr>
               ))}

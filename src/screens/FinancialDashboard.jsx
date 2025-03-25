@@ -4,25 +4,24 @@ import { FiRefreshCw } from "react-icons/fi";
 import DataTable from "../components/table/DataTable";
 import FinancialSummary from "../components/FinancialSUmmary";
 import { AuthContext } from "../services/auth/auth.context";
-import { useLocation } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddMasterModal from "../components/Modal/create-user/AddMasterModal";
 import ToggleSwitch from "../components/ToggleSwipeSwitch";
 import { AccountContext } from "../services/account/account.context";
-
 import { sortData, paginateData, filterData } from "../utils/table";
 import { getFinancialCol } from "../utils/columns";
 import CreditModal from "../components/Modal/credit/CreditModal";
 
 import { getDownLineData } from "../services/account/account.service";
-import {
-  getButtonTitle,
-  getUserType,
-  getUserTypeCode,
-} from "../utils/user_type_converter";
+
+import { getButtonTitle, getUserType, getUserTypeCode } from "../utils/user_type_converter";
+import UserStatusManagement from "../components/Rossan/UserStatusManagement";
+
 
 const FinancialDashboard = () => {
+  const navigate = useNavigate()
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreditModalOpen, setIsCreditModalOpen] = useState(false);
@@ -112,6 +111,7 @@ const FinancialDashboard = () => {
   // Table State
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [gr, setGr] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("username");
   const [sortDirection, setSortDirection] = useState("asc");
@@ -122,36 +122,12 @@ const FinancialDashboard = () => {
 
   if (!isNested) {
     actionsConfig = {
-      payment: {
-        icon: "DollarSign",
-        onClick: (row) => handlePayment(row),
-        color: "gray",
-      },
-      swap: {
-        icon: "ArrowUpDown",
-        onClick: (row) => console.log("Profile:", row),
-        color: "gray",
-      },
-      profile: {
-        icon: "User",
-        onClick: (row) => console.log("Profile:", row),
-        color: "gray",
-      },
-      something: {
-        icon: "GrSchedulePlay",
-        onClick: (row) => console.log("Lock:", row),
-        color: "gray",
-      },
-      settings: {
-        icon: "Settings",
-        onClick: (row) => console.log("Settings:", row),
-        color: "gray",
-      },
-      lock: {
-        icon: "Lock",
-        onClick: (row) => console.log("Lock:", row),
-        color: "gray",
-      },
+      payment: { icon: "DollarSign", onClick: (row) => handlePayment(row), color: "gray" },
+      swap: { icon: "ArrowUpDown", onClick: (row) => console.log("Profile:", row), color: "gray" },
+      profile: { icon: "User", onClick: (row) => console.log("Profile:", row), color: "gray" },
+      something: { icon: "GrSchedulePlay", onClick: (row) => handlePlay(row), color: "gray" },
+      settings: { icon: "Settings", onClick: (row) => handleGrStatus(row.fs_id), color: "gray" },
+      // lock: { icon: "Lock", onClick: (row) => console.log("Lock:", row), color: "gray" },
       delete: {
         icon: "Trash2",
         onClick: (row) => handleDeleteUser(row.fs_id),
@@ -189,11 +165,15 @@ const FinancialDashboard = () => {
     await getDownLineData(user.user_id, userTypeCode);
   };
 
-  const handlePayment = (row) => {
-    setSelectedUserId(row);
-    setIsCreditModalOpen(true);
-  };
 
+const handlePayment = (row)=>{
+  setSelectedUserId(row);
+  setIsCreditModalOpen(true);
+}
+const handleGrStatus = (row) => {
+  setSelectedUserId(row);
+  setGr(true)
+}
   const FINANCIAL_DASHBOARD_COL = getFinancialCol(actionsConfig);
 
   const handleSort = (field) => {
@@ -209,81 +189,86 @@ const FinancialDashboard = () => {
     currentPage,
     entriesPerPage
   );
-
+  const handlePlay = (row) =>{
+    navigate(`/account/${row.fs_id}`, { state: { value: "accountStatement" } })
+  }
   return (
+    <>
     <div className="bg-gray-100 p-4 min-h-screen">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        theme="light"
-        bodyClassName="text-sm sm:text-base"
-      />
-      <div className="bg-white rounded-lg shadow-md p-6">
-        {/* Top Action Buttons */}
-        <div className="flex justify-end mb-4">
-          {userNow !== "User" && (
-            <>
-              <div className="flex justify-center items-center mr-4">
-                <span>Chips Summary</span>
-                <ToggleSwitch
-                  isChecked={isSummaryChecked}
-                  setIsChecked={() => setIsSummaryChecked(!isSummaryChecked)}
-                />
-              </div>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 flex items-center"
-              >
-                <FaUser className="mr-2" /> Add {buttonTitle}
-              </button>
-            </>
-          )}
-          <button
-            onClick={() => setUsers([...downlineData])}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded"
-            title="Refresh"
-          >
-            <FiRefreshCw />
-          </button>
-        </div>
+     
+     <ToastContainer position="top-center" autoClose={5000} theme="light"  bodyClassName="text-sm sm:text-base"/>
+     <div className="bg-white rounded-lg shadow-md p-6">
+       {/* Top Action Buttons */}
+       <div className="flex justify-end mb-4">
+         {userNow !== "User" && (
+           <>
+             <div className="flex justify-center items-center mr-4">
+               <span>Chips Summary</span>
+               <ToggleSwitch
+                 isChecked={isSummaryChecked}
+                 setIsChecked={() => setIsSummaryChecked(!isSummaryChecked)}
+               />
+             </div>
+             <button
+               onClick={() => setIsModalOpen(true)}
+               className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 flex items-center"
+             >
+               <FaUser className="mr-2" /> Add {buttonTitle}
+             </button>
+           </>
+         )}
+         <button
+           onClick={() => setUsers([...downlineData])}
+           className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded"
+           title="Refresh"
+         >
+           <FiRefreshCw />
+         </button>
+       </div>
 
-        {/* Summary Cards */}
-        <FinancialSummary data={data} />
-
-        {/* Table */}
-        <DataTable
+       {/* Summary Cards */}
+       <FinancialSummary data={data} />
+  
+       {/* Table */}
+       <DataTable
           columns={FINANCIAL_DASHBOARD_COL}
-          rowKey={buttonTitle}
-          data={currentUsers}
-          entriesPerPage={entriesPerPage}
-          setEntriesPerPage={setEntriesPerPage}
-          searchQuery={searchTerm}
-          setSearchQuery={setSearchTerm}
-          sortField={sortField}
-          sortDirection={sortDirection}
-          onSort={handleSort}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          goToPage={setCurrentPage}
-          userTypeCode={userTypeCode}
-          setIsNested={setIsNested}
-          isNested={isNested}
-        />
-      </div>
-      <AddMasterModal
-        title={buttonTitle}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
-      />
+         rowKey={buttonTitle}
+         data={currentUsers}
+         entriesPerPage={entriesPerPage}
+         setEntriesPerPage={setEntriesPerPage}
+         searchQuery={searchTerm}
+         setSearchQuery={setSearchTerm}
+         sortField={sortField}
+         sortDirection={sortDirection}
+         onSort={handleSort}
+         currentPage={currentPage}
+         totalPages={totalPages}
+         goToPage={setCurrentPage}
+         userTypeCode={userTypeCode}
+         setIsNested={setIsNested}
+         isNested={isNested}
+       />
+     </div>
+     <AddMasterModal
+       title={buttonTitle}
+       isOpen={isModalOpen}
+       onClose={() => setIsModalOpen(false)}
+       onSubmit={handleSubmit}
+     />
 
-      <CreditModal
-        isOpen={isCreditModalOpen}
-        onClose={() => setIsCreditModalOpen(false)}
-        selectedUserId={selectedUserId}
-        userTypeCode={userTypeCode}
-      />
-    </div>
+<CreditModal
+       isOpen={isCreditModalOpen}
+       onClose={() => setIsCreditModalOpen(false)}
+      selectedUserId={selectedUserId}
+      userTypeCode={userTypeCode}
+     />
+   </div>
+   {
+    gr ? <UserStatusManagement setGr={setGr}/> : null
+   }
+   
+    </>
+    
   );
 };
 

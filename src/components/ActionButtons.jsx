@@ -4,6 +4,8 @@ import { GrSchedulePlay } from "react-icons/gr";
 import { MdOutlineVpnLock } from "react-icons/md";
 import SportsSettingsModal from "./Rossan/SportsSettingsModal";
 import { useNavigate } from "react-router";
+import UserStatusManagement from "./Rossan/UserStatusManagement";
+import React, { memo } from "react";
 
 const ICONS = {
   DollarSign,
@@ -15,21 +17,19 @@ const ICONS = {
   GrSchedulePlay,
   MdOutlineVpnLock,
 };
-
-const ActionButtons = ({ actions,fs_id,data }) => {
-
+  
+const ActionButtons = memo(({ actions }) => {
   const navigate= useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isGr, setGr] = useState(null);
   const handleIconClick = (icon, onClick) => {
-    console.log(icon);
-
-    if (icon === "Settings") {
+    console.log("Clicked icon:", icon);
+  
+    if (icon === "MdOutlineVpnLock") {
       setIsModalOpen(true);
     }else if(icon === 'User'){
       navigate(`/account?fs_id=${fs_id}`)
-    }
-    if (onClick) {
+    }else if (onClick) {
       onClick();
     }
   };
@@ -43,6 +43,7 @@ const ActionButtons = ({ actions,fs_id,data }) => {
             <button
               key={index}
               // onClick={() => console.log('aaaccctions',fs_id)}
+
               onClick={() => handleIconClick(icon, onClick)}
               className={`p-2 rounded ${color === "red" ? "text-red-500" : "text-gray-500"}`}
             >
@@ -56,8 +57,12 @@ const ActionButtons = ({ actions,fs_id,data }) => {
       {isModalOpen && (
         <SportsSettingsModal onClose={() => setIsModalOpen(false)}/>
       )}
+
+    {isGr && (
+        <UserStatusManagement setGr={setGr}/>
+      )}
     </>
   );
-};
+});
 
 export default ActionButtons;
