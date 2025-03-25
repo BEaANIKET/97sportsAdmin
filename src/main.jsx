@@ -19,6 +19,7 @@ import AuthProvider from "./services/auth/auth.context.jsx";
 import FinancialDashboard from "./screens/FinancialDashboard.jsx";
 import { AccountProvider } from "./services/account/account.context.jsx";
 import MarketAnalysis from "./components/Rossan/MarketAnalysis.jsx";
+import ListMarket from "./components/Rossan/ListMarket.jsx";
 
 
 
@@ -39,7 +40,8 @@ createRoot(document.getElementById("root")).render(
           <Route path='/downline-pl' element={<ProfitLossTableDownline />} />
           <Route path='/restore-user' element={<RestoreUserTable />} />
           <Route path='/user-banking' element={<FinancialTable />} />
-          <Route path='/market-analysis' element={<MarketAnalysis />} />
+          <Route path='/market-analysis' element={<ListMarket />} />
+          <Route path='/MarketDetail' element={<MarketAnalysis />} />
           <Route path='/master-banking' element={<FinancialTable />} />
           <Route path='/list/user' element={<FinancialDashboard />} />
           <Route path='/list/master' element={<FinancialDashboard />} />
