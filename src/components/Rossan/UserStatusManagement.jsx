@@ -13,7 +13,7 @@ const UserStatusManagement = ({setGr}) => {
 
   return (
     <div className="fixed inset-0 p-2 flex  justify-center top-0 z-20">
-      <div className="w-full max-w-lg h-[430px] bg-white shadow-lg rounded-sm overflow-hidden">
+      <div className="w-full max-w-lg h-[500px] bg-white shadow-lg rounded-sm overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center bg-blue-900 text-white px-4 py-3">
           <h2 className="text-lg font-bold">Change Status</h2>

@@ -45,7 +45,7 @@ const ActionButtons = memo(({ actions,fs_id }) => {
               // onClick={() => console.log('aaaccctions',fs_id)}
 
               onClick={() => handleIconClick(icon, onClick)}
-              className={`p-2 rounded ${color === "red" ? "text-red-500" : "text-gray-500"}`}
+              className={`p-2 rounded ${color === "red" ? "text-red-500" : "text-gray-500"} bg-gray-300`}
             >
               {IconComponent && <IconComponent size={18} />}
             </button>
