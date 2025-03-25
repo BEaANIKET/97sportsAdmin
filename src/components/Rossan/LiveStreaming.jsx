@@ -5,6 +5,7 @@ import UserBookModal from './UserBookModal'
 import UserFirtsModal from './UserFirstModal'
 const LiveStreaming = ({gmid}) => {
     const [userbook, openUserBook] = useState (false)
+    
   return (
     <>
     <div className="w-full max-w-md mx-auto p-2 rounded-md bg-gray-100 mt-2">
@@ -22,8 +23,8 @@ const LiveStreaming = ({gmid}) => {
         </div>
        </div>
     </div>
-    <BottomMarket />
-    <BetTable />
+    <BottomMarket  />
+    {/* <BetTable /> */}
     {
         userbook ? <UserFirtsModal openUserBook={openUserBook} /> : null
     }
