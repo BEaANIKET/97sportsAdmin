@@ -18,9 +18,10 @@ const formatValue = (
   if (format === "username") {
     return (
       <div
-        className={`flex flex-col items-center gap-2 ${
+        className={`flex flex-row items-center gap-2 ${
           isNested ? "text-black" : "text-blue-500"
         }`}
+        style={{fontSize: "12px"}}
         onClick={async () => {
           if (userTypeCode && !isNested) {
             console.log(row.fs_id, userTypeCode);
@@ -32,10 +33,12 @@ const formatValue = (
       >
         {rowKey.length > 0 && rowKey && (
           <span
-            className={`px-1 py-1 text-xs font-bold rounded bg-green-500 text-white 
+          style={{fontSize: "8px", minWidth: "80px"}}
+            className={`px-1 py-1 font-bold rounded bg-green-500 text-white 
        `}
           >
-            {rowKey}
+            <center style={{}}>{rowKey}</center>
+            
           </span>
         )}
         <span
