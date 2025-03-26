@@ -16,12 +16,16 @@ import CreditModal from "../components/Modal/credit/CreditModal";
 
 import { getDownLineData } from "../services/account/account.service";
 
-import { getButtonTitle, getUserType, getUserTypeCode } from "../utils/user_type_converter";
+import {
+  getButtonTitle,
+  getUserType,
+  getUserTypeCode,
+} from "../utils/user_type_converter";
 import UserStatusManagement from "../components/Rossan/UserStatusManagement";
-
+import axios from "axios";
 
 const FinancialDashboard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreditModalOpen, setIsCreditModalOpen] = useState(false);
@@ -76,6 +80,30 @@ const FinancialDashboard = () => {
   };
 
   useEffect(() => {
+    const getIprData = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const result = await axios.post(
+          "https://admin.titan97.live/Apicall/myprofile",
+          { user_id: user.user_id }
+        );
+        setData({
+          totalBalance: result.data.balance,
+          totalExposure: result.data.bet_balance,
+          availableBalance: result.data.balance-result.data.bet_balance,
+          balance: 0,
+          totalAvailableBalance: 0,
+          uplinePL: 0,
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getIprData();
+  }, []);
+
+  useEffect(() => {
     if (deletedUserStatus) {
       if (deletedUserStatus.success) {
         toast.success(deletedUserStatus.message);
@@ -122,11 +150,31 @@ const FinancialDashboard = () => {
 
   if (!isNested) {
     actionsConfig = {
-      payment: { icon: "DollarSign", onClick: (row) => handlePayment(row), color: "gray" },
-      swap: { icon: "ArrowUpDown", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      profile: { icon: "User", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      something: { icon: "GrSchedulePlay", onClick: (row) => handlePlay(row), color: "gray" },
-      settings: { icon: "Settings", onClick: (row) => handleGrStatus(row.fs_id), color: "gray" },
+      payment: {
+        icon: "DollarSign",
+        onClick: (row) => handlePayment(row),
+        color: "gray",
+      },
+      swap: {
+        icon: "ArrowUpDown",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      profile: {
+        icon: "User",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      something: {
+        icon: "GrSchedulePlay",
+        onClick: (row) => handlePlay(row),
+        color: "gray",
+      },
+      settings: {
+        icon: "Settings",
+        onClick: (row) => handleGrStatus(row.fs_id),
+        color: "gray",
+      },
       // lock: { icon: "Lock", onClick: (row) => console.log("Lock:", row), color: "gray" },
       delete: {
         icon: "Trash2",
@@ -165,15 +213,14 @@ const FinancialDashboard = () => {
     await getDownLineData(user.user_id, userTypeCode);
   };
 
-
-const handlePayment = (row)=>{
-  setSelectedUserId(row);
-  setIsCreditModalOpen(true);
-}
-const handleGrStatus = (row) => {
-  setSelectedUserId(row);
-  setGr(true)
-}
+  const handlePayment = (row) => {
+    setSelectedUserId(row);
+    setIsCreditModalOpen(true);
+  };
+  const handleGrStatus = (row) => {
+    setSelectedUserId(row);
+    setGr(true);
+  };
   const FINANCIAL_DASHBOARD_COL = getFinancialCol(actionsConfig);
 
   const handleSort = (field) => {
@@ -189,16 +236,55 @@ const handleGrStatus = (row) => {
     currentPage,
     entriesPerPage
   );
-  const handlePlay = (row) =>{
-    navigate(`/account/${row.fs_id}`, { state: { value: "accountStatement" } })
-  }
+  const handlePlay = (row) => {
+    navigate(`/account/${row.fs_id}`, { state: { value: "accountStatement" } });
+  };
   return (
     <>
+
+      <div className="bg-gray-100 p-1 min-h-screen">
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          theme="light"
+          bodyClassName="text-sm sm:text-base"
+        />
+        <div className="bg-white rounded-lg shadow-md p-6">
+          {/* Top Action Buttons */}
+          <div className="flex justify-end mb-4">
+            {userNow !== "User" && (
+              <>
+                <div className="flex justify-center items-center mr-4">
+                  <span>Chips Summary</span>
+                  <ToggleSwitch
+                    isChecked={isSummaryChecked}
+                    setIsChecked={() => setIsSummaryChecked(!isSummaryChecked)}
+                  />
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 flex items-center"
+                >
+                  <FaUser className="mr-2" /> Add {buttonTitle}
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => setUsers([...downlineData])}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded"
+              title="Refresh"
+            >
+              <FiRefreshCw />
+            </button>
+          </div>
+
+          {/* Summary Cards */}
+          <FinancialSummary data={data} />
+            {/*
     <div className="bg-gray-100 min-h-screen">
      
      <ToastContainer position="top-center" autoClose={5000} theme="light"  bodyClassName="text-sm sm:text-base"/>
      <div className=" rounded-lg shadow-md p-6">
-       {/* Top Action Buttons */}
        <div className="flex justify-end mb-4">
          {userNow !== "User" && (
            <>
@@ -227,50 +313,44 @@ const handleGrStatus = (row) => {
            <FiRefreshCw />
          </button>
        </div>
+       */}
 
-       {/* Summary Cards */}
-       <FinancialSummary data={data} />
-  
-       {/* Table */}
-       <DataTable
-          columns={FINANCIAL_DASHBOARD_COL}
-         rowKey={buttonTitle}
-         data={currentUsers}
-         entriesPerPage={entriesPerPage}
-         setEntriesPerPage={setEntriesPerPage}
-         searchQuery={searchTerm}
-         setSearchQuery={setSearchTerm}
-         sortField={sortField}
-         sortDirection={sortDirection}
-         onSort={handleSort}
-         currentPage={currentPage}
-         totalPages={totalPages}
-         goToPage={setCurrentPage}
-         userTypeCode={userTypeCode}
-         setIsNested={setIsNested}
-         isNested={isNested}
-       />
-     </div>
-     <AddMasterModal
-       title={buttonTitle}
-       isOpen={isModalOpen}
-       onClose={() => setIsModalOpen(false)}
-       onSubmit={handleSubmit}
-     />
+          {/* Table */}
+          <DataTable
+            columns={FINANCIAL_DASHBOARD_COL}
+            rowKey={buttonTitle}
+            data={currentUsers}
+            entriesPerPage={entriesPerPage}
+            setEntriesPerPage={setEntriesPerPage}
+            searchQuery={searchTerm}
+            setSearchQuery={setSearchTerm}
+            sortField={sortField}
+            sortDirection={sortDirection}
+            onSort={handleSort}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            goToPage={setCurrentPage}
+            userTypeCode={userTypeCode}
+            setIsNested={setIsNested}
+            isNested={isNested}
+          />
+        </div>
+        <AddMasterModal
+          title={buttonTitle}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleSubmit}
+        />
 
-<CreditModal
-       isOpen={isCreditModalOpen}
-       onClose={() => setIsCreditModalOpen(false)}
-      selectedUserId={selectedUserId}
-      userTypeCode={userTypeCode}
-     />
-   </div>
-   {
-    gr ? <UserStatusManagement setGr={setGr}/> : null
-   }
-   
+        <CreditModal
+          isOpen={isCreditModalOpen}
+          onClose={() => setIsCreditModalOpen(false)}
+          selectedUserId={selectedUserId}
+          userTypeCode={userTypeCode}
+        />
+      </div>
+      {gr ? <UserStatusManagement setGr={setGr} /> : null}
     </>
-    
   );
 };
 
