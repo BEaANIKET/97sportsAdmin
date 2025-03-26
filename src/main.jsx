@@ -48,7 +48,7 @@ createRoot(document.getElementById("root")).render(
           <Route path='/list/super-master' element={<FinancialDashboard />} />
           <Route path='/list/agent' element={<FinancialDashboard />} />
           <Route path='/list/mini-admin' element={<FinancialDashboard />} />
-          <Route path="*" element={() => <h2>404 Not Found</h2>} />
+          <Route path="*" element={() => <h2>404 Not Found</h2>} /> ṃ̇
         </Route>
       </Routes>
     </Router>
