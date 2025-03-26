@@ -8,7 +8,7 @@ const DataTable = ({ title, data, columns, entriesPerPage, setEntriesPerPage, se
 
  
   return (
-    <div className="bg-white border border-gray-300 rounded">
+    <div className="bg-white mt-4 border border-gray-300 rounded">
       {
         title &&  <div className="bg-gray-800 text-white p-3 font-bold text-lg">{title}</div>
       }
