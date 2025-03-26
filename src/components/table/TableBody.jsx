@@ -1,29 +1,38 @@
 import { useContext } from "react";
 import ActionButtons from "../ActionButtons";
 import { AccountContext } from "../../services/account/account.context";
+import { useNavigate } from "react-router";
 
-
-
-
-const formatValue = (value, format, row, rowKey = "", userTypeCode , onGetDownLineData , setIsNested , isNested) => {
-  
+const formatValue = (
+  value,
+  format,
+  row,
+  rowKey = "",
+  userTypeCode,
+  onGetDownLineData,
+  setIsNested,
+  isNested
+) => {
+  const navigate = useNavigate();
 
   if (typeof format === "function") {
-    return format(row); 
+    return format(row);
   }
   if (format === "username") {
     return (
+      <div
+        className={`flex items-center gap-2 ${
+          isNested ? "text-black" : "text-blue-500"
+        }`}
+        onClick={async () => {
+          if (userTypeCode && !isNested) {
+            console.log(row.fs_id, userTypeCode);
 
-      <div  className={`flex items-center gap-2 ${isNested ? "text-black": "text-blue-500" }`}
-      onClick={ async () => {
-        if (userTypeCode && !isNested) {
-          console.log(row.fs_id , userTypeCode);
-          
-          await onGetDownLineData(row.fs_id, userTypeCode);
-          setIsNested(true);
-         
-        }
-      }}  >
+            await onGetDownLineData(row.fs_id, userTypeCode);
+            setIsNested(true);
+          }
+        }}
+      >
         {rowKey.length > 0 && rowKey && (
           <span
             className={`px-2 py-1 text-xs font-bold rounded bg-green-500 text-white 
@@ -32,12 +41,26 @@ const formatValue = (value, format, row, rowKey = "", userTypeCode , onGetDownLi
             {rowKey}
           </span>
         )}
-        <span className={`text-blue-500 ${
-              userTypeCode ? "cursor-pointer hover:underline" : ""
-            }`}>{value}</span>
-
-        
+        <span
+          className={`text-blue-500 ${
+            userTypeCode ? "cursor-pointer hover:underline" : ""
+          }`}
+        >
+          {value}
+        </span>
       </div>
+    );
+  }
+
+  if (format === "profit") {
+    return (
+      <span
+        className={`px-2 py-1 text-xs font-bold rounded ${
+          value >= 0 ? "text-green-500" : " text-red-500"
+        }`}
+      >
+        {value}
+      </span>
     );
   }
 
@@ -46,6 +69,41 @@ const formatValue = (value, format, row, rowKey = "", userTypeCode , onGetDownLi
       style: "currency",
       currency: "INR",
     }).format(value);
+  }
+
+  if (format === "makelink") {
+    return (
+      <span
+        onClick={() => navigate(`?m=${row?.sportname}`)}
+        className={`px-2 py-1 text-xs cursor-pointer font-bold rounded text-black `}
+      >
+        {value}
+      </span>
+    );
+  }
+  if (format === "eventname") {
+    return (
+      <span
+        onClick={() => navigate(`?m=${row?.sportname}&e=${row?.eventname}`)}
+        className={`px-2 py-1 text-xs cursor-pointer rounded text-blue-500 `}
+      >
+        {value}
+      </span>
+    );
+  }
+  if (format === "marketname") {
+    return (
+      <span
+        onClick={() =>
+          navigate(
+            `?m=${row?.sportname}&e=${row?.eventname}&m=${row.marketname}`
+          )
+        }
+        className={`px-2 py-1 text-xs cursor-pointer rounded text-blue-500 `}
+      >
+        {value}
+      </span>
+    );
   }
 
   if (format === "status") {
@@ -63,8 +121,14 @@ const formatValue = (value, format, row, rowKey = "", userTypeCode , onGetDownLi
   return value;
 };
 
-const TableBody = ({ data, columns, rowKey , userTypeCode , setIsNested , isNested}) => {
-
+const TableBody = ({
+  data,
+  columns,
+  rowKey,
+  userTypeCode,
+  setIsNested,
+  isNested,
+}) => {
   const { onGetDownLineData } = useContext(AccountContext);
   return (
     <tbody>
@@ -82,18 +146,27 @@ const TableBody = ({ data, columns, rowKey , userTypeCode , setIsNested , isNest
                   <td
                     key={`${key}-${colIndex}`}
                     className="border border-gray-300 p-2 text-right"
-                    
                   >
-                   {actionsConfig ? (
-                    <ActionButtons actions={actionsConfig(row)} />
-                  ) : format ? (
-                    formatValue(cellValue, format, row , rowKey , userTypeCode , onGetDownLineData , setIsNested , isNested)
-                  ) : (
-                    cellValue
-                  )}
-                </td>
-              );
-            })}
+                    {actionsConfig ? (
+                      <ActionButtons actions={actionsConfig(row)} />
+                    ) : format ? (
+                      formatValue(
+                        cellValue,
+                        format,
+                        row,
+                        rowKey,
+                        userTypeCode,
+                        onGetDownLineData,
+                        setIsNested,
+                        isNested
+                      )
+                    ) : (
+                      cellValue
+                    )}
+                  </td>
+                );
+              }
+            )}
           </tr>
         ))
       ) : (

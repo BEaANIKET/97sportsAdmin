@@ -198,10 +198,12 @@ export const USER_MATCH_DETAILS_COL = [
   {
     key: "sportname",
     label: "Sport Name",
+    format: "eventname",
   },
   {
     key: "profitloss",
     label: "Profit & Loss",
+    format: "profit",
   },
   {
     key: "commision",
@@ -210,5 +212,71 @@ export const USER_MATCH_DETAILS_COL = [
   {
     key: "totalpsl",
     label: "Total P&L",
+    format: "profit",
   },
 ];
+
+export const USER_MATCH_DETAILS_GAME_COL = [
+  {
+    key: "sportname",
+    label: "Sport Name",
+    format: "makelink",
+  },
+  {
+    key: "eventname",
+    label: "Event Name",
+    format: "eventname",
+  },
+  {
+    key: "profitloss",
+    label: "Profit & Loss",
+    format: "profit",
+  },
+  {
+    key: "commision",
+    label: "Commission",
+  },
+  {
+    key: "totalpsl",
+    label: "Total P&L",
+    format: "profit",
+  },
+];
+
+export const USER_MATCH_DETAILS_GAMENAME_COL = [
+  {
+    key: "sportname",
+    label: "Sport Name",
+    format: "makelink",
+  },
+  {
+    key: "eventname",
+    label: "Event Name",
+    format: "makelink",
+  },
+  {
+    key: "marketname",
+    label: "Market Name",
+    format: "marketname",
+  },
+  {
+    key: "result",
+    label: "Result",
+  },
+  {
+    key: "profitloss",
+    label: "Profit & Loss",
+    format: "profit",
+  },
+  {
+    key: "commision",
+    label: "Commission",
+  },
+  {
+    key: "settletime",
+    label: "Settle Time",
+  },
+];
+
+
+// export const 
