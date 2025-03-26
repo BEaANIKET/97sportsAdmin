@@ -17,11 +17,11 @@ const RestoreUserTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       const dummyData = [
-        { id: 1, username: "john_doe", name: "John Doe", date: "2025-03-10 14:22:15" },
-        { id: 2, username: "jane_smith", name: "Jane Smith", date: "2025-03-08 09:45:30" },
-        { id: 3, username: "robert_johnson", name: "Robert Johnson", date: "2025-03-05 16:33:42" },
-        { id: 4, username: "emily_davis", name: "Emily Davis", date: "2025-03-02 11:20:18" },
-        { id: 5, username: "michael_brown", name: "Michael Brown", date: "2025-02-28 13:15:55" },
+        { id: 1, username: "john_doe", name: "John Doe", date: "2025-03-10 14:22:15",action:'Restore' },
+        { id: 2, username: "jane_smith", name: "Jane Smith", date: "2025-03-08 09:45:30",action:'Restore' },
+        { id: 3, username: "robert_johnson", name: "Robert Johnson", date: "2025-03-05 16:33:42",action:'Restore' },
+        { id: 4, username: "emily_davis", name: "Emily Davis", date: "2025-03-02 11:20:18",action:'Restore' },
+        { id: 5, username: "michael_brown", name: "Michael Brown", date: "2025-02-28 13:15:55",action:'Restore' },
       ];
       setData(dummyData);
     };

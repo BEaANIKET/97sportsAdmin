@@ -32,7 +32,7 @@ const formatValue = (
       >
         {rowKey.length > 0 && rowKey && (
           <span
-            className={`px-2 py-1 text-xs font-bold rounded bg-green-500 text-white 
+            className={`px-1 py-1 text-xs font-bold rounded bg-green-500 text-white 
        `}
           >
             {rowKey}
@@ -40,7 +40,7 @@ const formatValue = (
         )}
         <span
           className={`text-blue-500 ${
-            userTypeCode ? "cursor-pointer hover:underline" : ""
+            userTypeCode ? "cursor-pointer font-semibold hover:underline" : ""
           }`}
         >
           {value}
