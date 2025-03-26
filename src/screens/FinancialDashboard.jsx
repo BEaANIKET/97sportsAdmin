@@ -242,16 +242,16 @@ const FinancialDashboard = () => {
   return (
     <>
 
-      <div className="bg-gray-100 p-1 min-h-screen">
+      {/* <div className="bg-gray-100 p-1 min-h-screen">
         <ToastContainer
           position="top-center"
           autoClose={5000}
           theme="light"
           bodyClassName="text-sm sm:text-base"
         />
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-lg shadow-md p-6"> */}
           {/* Top Action Buttons */}
-          <div className="flex justify-end mb-4">
+          {/* <div className="flex justify-end mb-4">
             {userNow !== "User" && (
               <>
                 <div className="flex justify-center items-center mr-4">
@@ -276,11 +276,12 @@ const FinancialDashboard = () => {
             >
               <FiRefreshCw />
             </button>
-          </div>
+          </div> */}
 
           {/* Summary Cards */}
-          <FinancialSummary data={data} />
-            {/*
+          {/* <FinancialSummary data={data} /> */}
+          
+            
     <div className="bg-gray-100 min-h-screen">
      
      <ToastContainer position="top-center" autoClose={5000} theme="light"  bodyClassName="text-sm sm:text-base"/>
@@ -313,7 +314,8 @@ const FinancialDashboard = () => {
            <FiRefreshCw />
          </button>
        </div>
-       */}
+       <FinancialSummary data={data} />
+      
 
           {/* Table */}
           <DataTable
