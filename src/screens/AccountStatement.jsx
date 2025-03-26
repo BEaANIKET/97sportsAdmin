@@ -64,7 +64,7 @@ const AccountStatement = () => {
     };
 
     return (
-        <div className="bg-white w-full">
+        <div className=" w-full">
             <div className="p-2 bg-white rounded-sm">
                 <DateRangePicker
                     startDate={fromDate} 
