@@ -20,6 +20,7 @@ import FinancialDashboard from "./screens/FinancialDashboard.jsx";
 import { AccountProvider } from "./services/account/account.context.jsx";
 import MarketAnalysis from "./components/Rossan/MarketAnalysis.jsx";
 import ListMarket from "./components/Rossan/ListMarket.jsx";
+import TestUi from "./components/Rossan/TestUi.jsx";
 
 
 
@@ -48,6 +49,7 @@ createRoot(document.getElementById("root")).render(
           <Route path='/list/super-master' element={<FinancialDashboard />} />
           <Route path='/list/agent' element={<FinancialDashboard />} />
           <Route path='/list/mini-admin' element={<FinancialDashboard />} />
+          <Route path="/testUi" element={<TestUi />} />
           <Route path="*" element={() => <h2>404 Not Found</h2>} /> ṃ̇
         </Route>
       </Routes>
