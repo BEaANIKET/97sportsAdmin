@@ -194,24 +194,26 @@ const handleGrStatus = (row) => {
   }
   return (
     <>
-    <div className="bg-gray-100 p-1 min-h-screen">
+    <div className="bg-gray-100 min-h-screen">
      
      <ToastContainer position="top-center" autoClose={5000} theme="light"  bodyClassName="text-sm sm:text-base"/>
-     <div className="bg-white rounded-lg shadow-md p-6">
+     <div className=" rounded-lg shadow-md p-6">
        {/* Top Action Buttons */}
        <div className="flex justify-end mb-4">
          {userNow !== "User" && (
            <>
              <div className="flex justify-center items-center mr-4">
-               <span>Chips Summary</span>
+               <span style={{fontSize: "10px", fontWeight: "bold"}}>Chips Summary &nbsp;</span>
                <ToggleSwitch
+                 
                  isChecked={isSummaryChecked}
                  setIsChecked={() => setIsSummaryChecked(!isSummaryChecked)}
                />
              </div>
              <button
+               style={{fontWeight: "bold", fontSize: "12px", padding: "8px"}}
                onClick={() => setIsModalOpen(true)}
-               className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 flex items-center"
+               className="bg-gray-400 hover:bg-gray-300 text-black-700 rounded mr-2 flex items-center"
              >
                <FaUser className="mr-2" /> Add {buttonTitle}
              </button>
