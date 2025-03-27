@@ -312,6 +312,5 @@ export const USER_BETS_DETAILS_COL = [
     key: "details",
     label: "Details",
     format: "bettype",
-];
-
+  },
 ];
