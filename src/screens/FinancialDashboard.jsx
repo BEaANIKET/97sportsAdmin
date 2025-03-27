@@ -157,7 +157,7 @@ const FinancialDashboard = () => {
       },
       swap: {
         icon: "ArrowUpDown",
-        onClick: (row) => console.log("Profile:", row),
+        onClick: (row) => gotoarrow(row),
         color: "gray",
       },
       profile: {
@@ -238,6 +238,9 @@ const FinancialDashboard = () => {
   );
   const handlePlay = (row) => {
     navigate(`/account/${row.fs_id}`, { state: { value: "accountStatement" } });
+  };
+  const gotoarrow = (row) => {
+    navigate(`/user/${row.fs_id}`, { state: { value: "accountStatement" } });
   };
   return (
     <>

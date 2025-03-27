@@ -29,7 +29,7 @@ const ActionButtons = memo(({ actions,fs_id }) => {
       setIsModalOpen(true);
     }else if(icon === 'User'){
       navigate(`/account?fs_id=${fs_id}`)
-    }else if (onClick) {
+    } if (onClick) {
       onClick();
     }
   };
