@@ -15,20 +15,23 @@ import { getFinancialCol } from "../utils/columns";
 import CreditModal from "../components/Modal/credit/CreditModal";
 
 import { getDownLineData } from "../services/account/account.service";
-import { getButtonTitle, getUserType, getUserTypeCode } from "../utils/user_type_converter";
+
+import {
+  getButtonTitle,
+  getUserType,
+  getUserTypeCode,
+} from "../utils/user_type_converter";
 import UserStatusManagement from "../components/Rossan/UserStatusManagement";
-
-
-
+import axios from "axios";
 
 const FinancialDashboard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreditModalOpen, setIsCreditModalOpen] = useState(false);
   const [isSummaryChecked, setIsSummaryChecked] = useState(false);
 
-  const [  isNested , setIsNested ] = useState(false);
+  const [isNested, setIsNested] = useState(false);
 
   const location = useLocation();
   const userRoute = location.pathname.split("/").pop();
@@ -36,7 +39,6 @@ const FinancialDashboard = () => {
   // for display the data of that user type
   const buttonTitle = getButtonTitle(userRoute);
   const userTypeCode = getUserTypeCode(userRoute);
-
 
   // financial summary data
   const [data, setData] = useState({
@@ -49,15 +51,21 @@ const FinancialDashboard = () => {
   });
 
   const { user } = useContext(AuthContext);
-  const { onCreateChild, error, downlineData, onGetDownLineData , setDeletedUserStatus , deletedUserStatus , onDeleteUser} =
-    useContext(AccountContext);
+  const {
+    onCreateChild,
+    error,
+    downlineData,
+    onGetDownLineData,
+    setDeletedUserStatus,
+    deletedUserStatus,
+    onDeleteUser,
+  } = useContext(AccountContext);
 
   const handleSubmit = async (formData) => {
     try {
       const responseData = await onCreateChild({
         ...formData,
         parent_id: user.user_id,
-     
       });
 
       if (responseData) {
@@ -67,9 +75,33 @@ const FinancialDashboard = () => {
         toast.error(error || "Failed to create child account");
       }
     } catch (err) {
-      toast.error("Failed to create child account",err);
+      toast.error("Failed to create child account", err);
     }
   };
+
+  useEffect(() => {
+    const getIprData = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const result = await axios.post(
+          "https://admin.titan97.live/Apicall/myprofile",
+          { user_id: user.user_id }
+        );
+        setData({
+          totalBalance: result.data.balance,
+          totalExposure: result.data.bet_balance,
+          availableBalance: result.data.balance-result.data.bet_balance,
+          balance: 0,
+          totalAvailableBalance: 0,
+          uplinePL: 0,
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getIprData();
+  }, []);
 
   useEffect(() => {
     if (deletedUserStatus) {
@@ -78,15 +110,13 @@ const FinancialDashboard = () => {
       } else {
         toast.error(deletedUserStatus.message);
       }
-      setTimeout(setDeletedUserStatus(null),1000)
+      setTimeout(setDeletedUserStatus(null), 1000);
     }
-  }, [deletedUserStatus,setDeletedUserStatus])
+  }, [deletedUserStatus, setDeletedUserStatus]);
 
   useEffect(() => {
     const fetchDownLineData = async () => {
       if (user?.user_id && !isNested) {
-       
-        
         try {
           await onGetDownLineData(user.user_id, userTypeCode);
         } catch (error) {
@@ -94,19 +124,17 @@ const FinancialDashboard = () => {
         }
       }
     };
-  
+
     fetchDownLineData();
   }, [user?.user_id, userTypeCode, isNested]);
-  
+
   useEffect(() => {
     if (downlineData) {
       setUsers(downlineData);
     }
   }, [downlineData]);
 
-  const userNow = getUserType(user?.user_type)
-  
-  
+  const userNow = getUserType(user?.user_type);
 
   // Table State
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -116,58 +144,89 @@ const FinancialDashboard = () => {
   const [sortField, setSortField] = useState("username");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  // testing 
+  // testing
   const [selectedUserId, setSelectedUserId] = useState(null);
-  let actionsConfig ;
+  let actionsConfig;
 
   if (!isNested) {
     actionsConfig = {
-      payment: { icon: "DollarSign", onClick: (row) => handlePayment(row), color: "gray" },
-      swap: { icon: "ArrowUpDown", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      profile: { icon: "User", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      something: { icon: "GrSchedulePlay", onClick: (row) => handlePlay(row), color: "gray" },
-      settings: { icon: "Settings", onClick: (row) => handleGrStatus(row.fs_id), color: "gray" },
+      payment: {
+        icon: "DollarSign",
+        onClick: (row) => handlePayment(row),
+        color: "gray",
+      },
+      swap: {
+        icon: "ArrowUpDown",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      profile: {
+        icon: "User",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      something: {
+        icon: "GrSchedulePlay",
+        onClick: (row) => handlePlay(row),
+        color: "gray",
+      },
+      settings: {
+        icon: "Settings",
+        onClick: (row) => handleGrStatus(row.fs_id),
+        color: "gray",
+      },
       // lock: { icon: "Lock", onClick: (row) => console.log("Lock:", row), color: "gray" },
       delete: {
         icon: "Trash2",
         onClick: (row) => handleDeleteUser(row.fs_id),
         color: "red",
       },
-      vpnlock: { icon: "MdOutlineVpnLock", onClick: (row) => console.log("Lock:", row), color: "gray" },
+      vpnlock: {
+        icon: "MdOutlineVpnLock",
+        onClick: (row) => console.log("Lock:", row),
+        color: "gray",
+      },
     };
-    
-  }
-  else{
+  } else {
     actionsConfig = {
-      swap: { icon: "ArrowUpDown", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      profile: { icon: "User", onClick: (row) => console.log("Profile:", row), color: "gray" },
-      something: { icon: "GrSchedulePlay", onClick: (row) => console.log("Lock:", row), color: "gray" },
-    }
+      swap: {
+        icon: "ArrowUpDown",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      profile: {
+        icon: "User",
+        onClick: (row) => console.log("Profile:", row),
+        color: "gray",
+      },
+      something: {
+        icon: "GrSchedulePlay",
+        onClick: (row) => console.log("Lock:", row),
+        color: "gray",
+      },
+    };
   }
-   
-  // Function to handle user deletion
-const handleDeleteUser = async (user_id) => {
- 
-  await onDeleteUser(user_id);
-  await getDownLineData(user.user_id , userTypeCode);
-  
-};
 
-const handlePayment = (row)=>{
-  setSelectedUserId(row);
-  setIsCreditModalOpen(true);
-}
-const handleGrStatus = (row) => {
-  setSelectedUserId(row);
-  setGr(true)
-}
+  // Function to handle user deletion
+  const handleDeleteUser = async (user_id) => {
+    await onDeleteUser(user_id);
+    await getDownLineData(user.user_id, userTypeCode);
+  };
+
+  const handlePayment = (row) => {
+    setSelectedUserId(row);
+    setIsCreditModalOpen(true);
+  };
+  const handleGrStatus = (row) => {
+    setSelectedUserId(row);
+    setGr(true);
+  };
   const FINANCIAL_DASHBOARD_COL = getFinancialCol(actionsConfig);
 
-  const handleSort =(field)=>{
-
+  const handleSort = (field) => {
     setSortField(field);
-    setSortDirection(sortDirection === "asc"? "desc" : "asc");
-  }
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  };
 
   // **Apply Filtering, Sorting, and Pagination in Sequence**
   const filteredUsers = filterData(users, searchTerm);
@@ -177,29 +236,70 @@ const handleGrStatus = (row) => {
     currentPage,
     entriesPerPage
   );
-  const handlePlay = (row) =>{
-    navigate(`/account/${row.fs_id}`, { state: { value: "accountStatement" } })
-  }
+  const handlePlay = (row) => {
+    navigate(`/account/${row.fs_id}`, { state: { value: "accountStatement" } });
+  };
   return (
     <>
-    <div className="bg-gray-100 p-4 min-h-screen">
+
+      <div className="bg-gray-100 p-1 min-h-screen">
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          theme="light"
+          bodyClassName="text-sm sm:text-base"
+        />
+        <div className="bg-white rounded-lg shadow-md p-6">
+          {/* Top Action Buttons */}
+          <div className="flex justify-end mb-4">
+            {userNow !== "User" && (
+              <>
+                <div className="flex justify-center items-center mr-4">
+                  <span>Chips Summary</span>
+                  <ToggleSwitch
+                    isChecked={isSummaryChecked}
+                    setIsChecked={() => setIsSummaryChecked(!isSummaryChecked)}
+                  />
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 flex items-center"
+                >
+                  <FaUser className="mr-2" /> Add {buttonTitle}
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => setUsers([...downlineData])}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded"
+              title="Refresh"
+            >
+              <FiRefreshCw />
+            </button>
+          </div>
+
+          {/* Summary Cards */}
+          <FinancialSummary data={data} />
+            {/*
+    <div className="bg-gray-100 min-h-screen">
      
      <ToastContainer position="top-center" autoClose={5000} theme="light"  bodyClassName="text-sm sm:text-base"/>
-     <div className="bg-white rounded-lg shadow-md p-6">
-       {/* Top Action Buttons */}
+     <div className=" rounded-lg shadow-md p-6">
        <div className="flex justify-end mb-4">
          {userNow !== "User" && (
            <>
              <div className="flex justify-center items-center mr-4">
-               <span>Chips Summary</span>
+               <span style={{fontSize: "10px", fontWeight: "bold"}}>Chips Summary &nbsp;</span>
                <ToggleSwitch
+                 
                  isChecked={isSummaryChecked}
                  setIsChecked={() => setIsSummaryChecked(!isSummaryChecked)}
                />
              </div>
              <button
+               style={{fontWeight: "bold", fontSize: "12px", padding: "8px"}}
                onClick={() => setIsModalOpen(true)}
-               className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 flex items-center"
+               className="bg-gray-400 hover:bg-gray-300 text-black-700 rounded mr-2 flex items-center"
              >
                <FaUser className="mr-2" /> Add {buttonTitle}
              </button>
@@ -213,50 +313,44 @@ const handleGrStatus = (row) => {
            <FiRefreshCw />
          </button>
        </div>
+       */}
 
-       {/* Summary Cards */}
-       <FinancialSummary data={data} />
-  
-       {/* Table */}
-       <DataTable
-          columns={FINANCIAL_DASHBOARD_COL}
-         rowKey={buttonTitle}
-         data={currentUsers}
-         entriesPerPage={entriesPerPage}
-         setEntriesPerPage={setEntriesPerPage}
-         searchQuery={searchTerm}
-         setSearchQuery={setSearchTerm}
-         sortField={sortField}
-         sortDirection={sortDirection}
-         onSort={handleSort}
-         currentPage={currentPage}
-         totalPages={totalPages}
-         goToPage={setCurrentPage}
-         userTypeCode={userTypeCode}
-         setIsNested={setIsNested}
-         isNested={isNested}
-       />
-     </div>
-     <AddMasterModal
-       title={buttonTitle}
-       isOpen={isModalOpen}
-       onClose={() => setIsModalOpen(false)}
-       onSubmit={handleSubmit}
-     />
+          {/* Table */}
+          <DataTable
+            columns={FINANCIAL_DASHBOARD_COL}
+            rowKey={buttonTitle}
+            data={currentUsers}
+            entriesPerPage={entriesPerPage}
+            setEntriesPerPage={setEntriesPerPage}
+            searchQuery={searchTerm}
+            setSearchQuery={setSearchTerm}
+            sortField={sortField}
+            sortDirection={sortDirection}
+            onSort={handleSort}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            goToPage={setCurrentPage}
+            userTypeCode={userTypeCode}
+            setIsNested={setIsNested}
+            isNested={isNested}
+          />
+        </div>
+        <AddMasterModal
+          title={buttonTitle}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleSubmit}
+        />
 
-<CreditModal
-       isOpen={isCreditModalOpen}
-       onClose={() => setIsCreditModalOpen(false)}
-      selectedUserId={selectedUserId}
-      userTypeCode={userTypeCode}
-     />
-   </div>
-   {
-    gr ? <UserStatusManagement setGr={setGr}/> : null
-   }
-   
+        <CreditModal
+          isOpen={isCreditModalOpen}
+          onClose={() => setIsCreditModalOpen(false)}
+          selectedUserId={selectedUserId}
+          userTypeCode={userTypeCode}
+        />
+      </div>
+      {gr ? <UserStatusManagement setGr={setGr} /> : null}
     </>
-    
   );
 };
 

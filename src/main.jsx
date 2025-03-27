@@ -21,6 +21,7 @@ import { AccountProvider } from "./services/account/account.context.jsx";
 import UserMatchDetails from "./screens/UserMatchDetails.jsx";
 import MarketAnalysis from "./components/Rossan/MarketAnalysis.jsx";
 import ListMarket from "./components/Rossan/ListMarket.jsx";
+import TestUi from "./components/Rossan/TestUi.jsx";
 
 
 createRoot(document.getElementById("root")).render(

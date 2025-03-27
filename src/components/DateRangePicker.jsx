@@ -2,7 +2,7 @@ import React from "react";
 
 const DateRangePicker = ({ startDate, setStartDate, endDate, setEndDate, loading, onButtonClick , buttonTitle }) => {
   return (
-    <div className="bg-white p-6 rounded shadow mb-6">
+    <div className="bg-white p-6 rounded mb-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* From Date */}
         <div>
