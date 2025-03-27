@@ -240,6 +240,7 @@ export const USER_MATCH_DETAILS_GAME_COL = [
     label: "Total P&L",
     format: "profit",
   },
+
 ];
 
 export const USER_MATCH_DETAILS_GAMENAME_COL = [
@@ -277,6 +278,45 @@ export const USER_MATCH_DETAILS_GAMENAME_COL = [
   },
 ];
 
+
+];
+
+export const USER_MATCH_DETAILS_GAMENAME_COL = [
+  {
+    key: "sportname",
+    label: "Sport Name",
+    format: "makelink",
+  },
+  {
+    key: "eventname",
+    label: "Event Name",
+    format: "makelink",
+  },
+  {
+    key: "marketname",
+    label: "Market Name",
+    format: "marketname",
+  },
+  {
+    key: "result",
+    label: "Result",
+  },
+  {
+    key: "profitloss",
+    label: "Profit & Loss",
+    format: "profit",
+  },
+  {
+    key: "commision",
+    label: "Commission",
+  },
+  {
+    key: "settletime",
+    label: "Settle Time",
+  },
+];
+
+
 export const USER_BETS_DETAILS_COL = [
   {
     key: "bettype",
@@ -313,4 +353,6 @@ export const USER_BETS_DETAILS_COL = [
     label: "Details",
     format: "bettype",
   },
+
 ];
+

@@ -2,7 +2,9 @@ import { useContext } from "react";
 import ActionButtons from "../ActionButtons";
 import { AccountContext } from "../../services/account/account.context";
 import { useNavigate } from "react-router";
+
 import { CloudMoon } from "lucide-react";
+
 
 const formatValue = (
   value,
@@ -14,7 +16,7 @@ const formatValue = (
   setIsNested,
   isNested
 ) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   if (typeof format === "function") {
     return format(row);
@@ -99,7 +101,8 @@ const formatValue = (
       <span
         onClick={() =>
           navigate(
-            `?m=${row?.sportname}&e=${row?.eventname}&ma=${row.marketname}`
+           ` ?m=${row?.sportname}&e=${row?.eventname}&ma=${row.marketname}`
+
           )
         }
         className={`px-2 py-1 text-xs cursor-pointer rounded text-blue-500 `}

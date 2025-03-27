@@ -1,6 +1,10 @@
 import React from "react";
 
-export const NavigationTable = () => {
+
+export const NavigationTableCompo = () => {
+
+
+
   const navigationData = [
     { title: "Bet History" },
     { title: "Profit & Loss" },
