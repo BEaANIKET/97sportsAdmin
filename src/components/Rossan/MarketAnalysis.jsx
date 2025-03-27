@@ -13,17 +13,17 @@ import {
 // import LoginModal from "../components/modals/LoginModal";
 import toast from "react-hot-toast";
 // import { socket } from "../main";
-import {io} from "socket.io-client"
+import { io } from "socket.io-client";
 import LiveStreaming from "./LiveStreaming";
 const socket = io("https://titan97.live");
 const MarketAnalysis = () => {
-  const params = useParams()
+  const params = useParams();
   const [activeTab, setActiveTab] = useState("Winner");
   const [activeSection, setActiveSection] = useState("Winner");
   const [apiData, setApiData] = useState([]);
   const tabs = ["All", "Popular", "Winner", "Bookmakers"];
   const [loder, setLoader] = useState(false);
-  const id  = params.id;
+  const id = params.id;
   const [searchParams] = useSearchParams();
   const sid = "4";
   const match_name = searchParams.get("match_name");
@@ -194,8 +194,13 @@ const MarketAnalysis = () => {
     });
   };
 
-  const handleBetAmountChange = (amount) => {
-    setBetAmount(amount);
+  const handleBetAmountChange = async(amount) => {
+    try {
+      const response = await axios.post()
+      setBetAmount(amount);
+    } catch (error) {
+      
+    }
   };
 
   const closeModal = () => {
@@ -306,58 +311,116 @@ const MarketAnalysis = () => {
                               {item.gstatus}
                             </div>
                           ) : (
-                            <div className=" w-1/2 flex h-full">
-                              <button
-                                onClick={() =>
-                                  handleBackClick(
-                                    dataIndex,
-                                    sectionIndex,
-                                    item,
-                                    item.odds[item.odds.length / 2 - 1]?.odds,
-                                    data.mname,
-                                    data.gmid,
-                                    data.mid
-                                  )
-                                }
-                                className="w-full bg-transparent"
-                              > 
-                              {/* {
-                                item?.odds?.otype === "back" &&  <> */}
-                                 <div className="bg-[#72bbef] text-center font-bold">
-                                {item.odds[item.odds.length / 2 - 1]?.odds}
-
-                                {/* {item.odds.length / 2} */}
-                              </div>
-                              <div className="bg-[#72bbef] text-center">
-                                {item.odds[item.odds.length / 2 - 1]?.size}
-                              </div> 
-                              {/* </> 
-                              } */}
-                              
-                                
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleLayClick(
-                                    dataIndex,
-                                    sectionIndex,
-                                    item,
-                                    item.odds[item.odds.length / 2]?.odds,
-                                    data.mname,
-                                    data.gmid,
-                                    data.mid
-                                  )
-                                }
-                                className="w-full bg-transparent"
-                              >
-                                <div className="bg-[#faa9ba] text-center font-bold">
-                                  {item.odds[item.odds.length / 2]?.odds}
+                            <>
+                              {data.mname.toString().toLowerCase() !==
+                                "bookmaker" &&
+                              data.mname.toString().toLowerCase() !==
+                                "match_odds" ? (
+                                <div className=" w-1/2 flex h-full">
+                                  <button
+                                    onClick={() =>
+                                      handleLayClick(
+                                        dataIndex,
+                                        sectionIndex,
+                                        item,
+                                        item.odds[item.odds.length / 2]?.odds,
+                                        data.mname,
+                                        data.gmid,
+                                        data.mid
+                                      )
+                                    }
+                                    className="w-full bg-transparent"
+                                  >
+                                    <div className="bg-[#faa9ba] text-center font-bold">
+                                      {item.odds[item.odds.length / 2]?.odds}
+                                    </div>
+                                    <div className="bg-[#faa9ba] text-center">
+                                      {item.odds[item.odds.length / 2]?.size}
+                                    </div>
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handleBackClick(
+                                        dataIndex,
+                                        sectionIndex,
+                                        item,
+                                        item.odds[item.odds.length / 2 - 1]
+                                          ?.odds,
+                                        data.mname,
+                                        data.gmid,
+                                        data.mid
+                                      )
+                                    }
+                                    className="w-full bg-transparent"
+                                  >
+                                    <div className="bg-[#72bbef] text-center font-bold">
+                                      {
+                                        item.odds[item.odds.length / 2 - 1]
+                                          ?.odds
+                                      }
+                                    </div>
+                                    <div className="bg-[#72bbef] text-center">
+                                      {
+                                        item.odds[item.odds.length / 2 - 1]
+                                          ?.size
+                                      }
+                                    </div>
+                                  </button>
                                 </div>
-                                <div className="bg-[#faa9ba] text-center">
-                                  {item.odds[item.odds.length / 2]?.size}
+                              ) : (
+                                <div className=" w-1/2 flex h-full">
+                                  <button
+                                    onClick={() =>
+                                      handleBackClick(
+                                        dataIndex,
+                                        sectionIndex,
+                                        item,
+                                        item.odds[item.odds.length / 2 - 1]
+                                          ?.odds,
+                                        data.mname,
+                                        data.gmid,
+                                        data.mid
+                                      )
+                                    }
+                                    className="w-full bg-transparent"
+                                  >
+                                    <div className="bg-[#72bbef] text-center font-bold">
+                                      {
+                                        item.odds[item.odds.length / 2 - 1]
+                                          ?.odds
+                                      }
+                                    </div>
+                                    <div className="bg-[#72bbef] text-center">
+                                      {
+                                        item.odds[item.odds.length / 2 - 1]
+                                          ?.size
+                                      }
+                                    </div>
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handleLayClick(
+                                        dataIndex,
+                                        sectionIndex,
+                                        item,
+                                        item.odds[item.odds.length / 2]?.odds,
+                                        data.mname,
+                                        data.gmid,
+                                        data.mid
+                                      )
+                                    }
+                                    className="w-full bg-transparent"
+                                  >
+                                    <div className="bg-[#faa9ba] text-center font-bold">
+                                      {item.odds[item.odds.length / 2]?.odds}
+                                    </div>
+                                    <div className="bg-[#faa9ba] text-center">
+                                      {item.odds[item.odds.length / 2]?.size}
+                                    </div>
+                                  </button>
                                 </div>
-                              </button>
-                            </div>
+                              )}
+                            </>
                           )}
                           {/* <div className="w-1/4 relative border-l border-gray-300"></div>
 
@@ -414,6 +477,7 @@ const MarketAnalysis = () => {
                                     className="p-2 text-center w-full border-r border-l border-[#aaaaaa] bg-gray-100"
                                     readOnly
                                   />
+                                  {/* <iframe style={{width: "100vw", height: "100vh"}} src="" frameborder="0"></iframe> */}
                                   <button
                                     // onClick={() =>
                                     //   setBetAmount(betAmount + 0.01)
@@ -510,7 +574,7 @@ const MarketAnalysis = () => {
             </div>
           ))
         : null}
-      <LiveStreaming gmid={id}/>
+      <LiveStreaming gmid={id} />
       {/* <AgeVerificationModal
         isOpen={showAgeVerificationModal}
         onConfirm={() => {

@@ -40,14 +40,14 @@ const AccountDashboard = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6  mx-auto my-8 max-w-6xl bg-white rounded-lg">
+    <div className="flex flex-col md:flex-row gap-1  mx-auto my-2 max-w-6xl rounded-lg">
       {/* Sidebar - takes full width on small screens, fixed width on medium+ */}
       <div className="w-full md:w-1/4">
         <Sidebar items={items} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
       {/* Content Area - takes full width on small screens, remaining space on medium+ */}
-      <div className="w-full md:w-3/4 bg-white p-6  rounded-lg shadow-md">
+      <div className="w-full md:w-3/4 p-4  rounded-lg shadow-md">
         {renderContent()}
       </div>
     </div>

@@ -3,8 +3,10 @@ import { DollarSign, Settings, User, Lock, Trash2, ArrowUpDown } from "lucide-re
 import { GrSchedulePlay } from "react-icons/gr";
 import { MdOutlineVpnLock } from "react-icons/md";
 import SportsSettingsModal from "./Rossan/SportsSettingsModal";
+import { useNavigate } from "react-router";
 import UserStatusManagement from "./Rossan/UserStatusManagement";
 import React, { memo } from "react";
+
 const ICONS = {
   DollarSign,
   Settings,
@@ -15,8 +17,9 @@ const ICONS = {
   GrSchedulePlay,
   MdOutlineVpnLock,
 };
-
-const ActionButtons = memo(({ actions }) => {
+  
+const ActionButtons = memo(({ actions,fs_id }) => {
+  const navigate= useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGr, setGr] = useState(null);
   const handleIconClick = (icon, onClick) => {
@@ -24,13 +27,9 @@ const ActionButtons = memo(({ actions }) => {
   
     if (icon === "MdOutlineVpnLock") {
       setIsModalOpen(true);
-    }
-    //  else if (icon === "Settings") {
-    //   setGr(!isGr);
-    //   console.log(isGr);
-      
-    // }
-     else if (onClick) {
+    }else if(icon === 'User'){
+      navigate(`/account?fs_id=${fs_id}`)
+    }else if (onClick) {
       onClick();
     }
   };
@@ -43,8 +42,10 @@ const ActionButtons = memo(({ actions }) => {
           return (
             <button
               key={index}
+              // onClick={() => console.log('aaaccctions',fs_id)}
+
               onClick={() => handleIconClick(icon, onClick)}
-              className={`p-2 rounded ${color === "red" ? "text-red-500" : "text-gray-500"}`}
+              className={`p-2 rounded ${color === "red" ? "text-red-500" : "text-gray-500"} bg-gray-300`}
             >
               {IconComponent && <IconComponent size={18} />}
             </button>
@@ -56,6 +57,7 @@ const ActionButtons = memo(({ actions }) => {
       {isModalOpen && (
         <SportsSettingsModal onClose={() => setIsModalOpen(false)}/>
       )}
+
     {isGr && (
         <UserStatusManagement setGr={setGr}/>
       )}

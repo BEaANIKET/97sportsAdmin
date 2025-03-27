@@ -193,7 +193,6 @@ export const ACCOUNT_STATEMENT_COL = [
   { key: "remark", label: "Remark", sortable: false },
   { key: "fromTo", label: "From/To", sortable: false },
 ];
-
 export const USER_MATCH_DETAILS_COL = [
   {
     key: "sportname",
@@ -313,5 +312,6 @@ export const USER_BETS_DETAILS_COL = [
     key: "details",
     label: "Details",
     format: "bettype",
-  },
+];
+
 ];
