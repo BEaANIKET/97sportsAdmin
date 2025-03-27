@@ -5,7 +5,6 @@ import "./index.css";
 import App from "./App.jsx";
 import ChangePassword from "./screens/ChangePassword.jsx";
 import DashBoard from "./screens/DashBoard.jsx";
-
 import AccountDashboard from "./screens/Accounts.jsx";
 import PasswordChangeHistory from "./screens/PasswordHistory.jsx";
 import RestoreUserTable from "./screens/RestoreUser.jsx";
