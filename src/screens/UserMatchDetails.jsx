@@ -4,53 +4,43 @@ import MatchTable from "../components/Modal/UserMatchDetails/MatchTable";
 import { NavigationTable } from "../components/Modal/UserMatchDetails/NavigationLink";
 import axios from "axios";
 import {
+  USER_BETS_DETAILS_COL,
   USER_MATCH_DETAILS_COL,
   USER_MATCH_DETAILS_GAME_COL,
   USER_MATCH_DETAILS_GAMENAME_COL,
 } from "../utils/columns";
 import DataTable from "../components/table/DataTable";
+import { useSearchParams } from "react-router";
 
 const UserMatchDetails = () => {
+  const [searchParams] = useSearchParams();
+  console.log(searchParams.toString());
+
+  // Get values from query parameters
+  const m = searchParams.get("m");
+  const e = searchParams.get("e");
+  const ma = searchParams.get("ma");
+
+  console.log(m, e, ma);
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.post(
-        "https://admin.titan97.live/Apicall/calculate_bets",
-        {}
-      );
+      await axios.post("https://admin.titan97.live/Apicall/calculate_bets", {});
     };
+    fetchData();
   }, []);
 
   const Data = [
-    {
-      sportname: "Cricket",
-      profitloss: 5000,
-      commision: 300,
-      totalpsl: 4700,
-    },
+    { sportname: "Cricket", profitloss: 5000, commision: 300, totalpsl: 4700 },
     {
       sportname: "Football",
       profitloss: -2000,
       commision: 150,
       totalpsl: -2150,
     },
-    {
-      sportname: "Tennis",
-      profitloss: 3500,
-      commision: 200,
-      totalpsl: 3300,
-    },
-    {
-      sportname: "Basketball",
-      profitloss: 1000,
-      commision: 50,
-      totalpsl: 950,
-    },
-    {
-      sportname: "Hockey",
-      profitloss: -500,
-      commision: 30,
-      totalpsl: -530,
-    },
+    { sportname: "Tennis", profitloss: 3500, commision: 200, totalpsl: 3300 },
+    { sportname: "Basketball", profitloss: 1000, commision: 50, totalpsl: 950 },
+    { sportname: "Hockey", profitloss: -500, commision: 30, totalpsl: -530 },
   ];
 
   const gameData = [
@@ -90,6 +80,7 @@ const UserMatchDetails = () => {
       totalpsl: 2500,
     },
   ];
+
   const gameDetailsData = [
     {
       sportname: "cricket",
@@ -137,39 +128,110 @@ const UserMatchDetails = () => {
       settletime: "Mar 23, 2025, 5:00:00 PM",
     },
   ];
+  const betsData = [
+    {
+      bettype: "Back",
+      userprice: 2.5,
+      amount: 5000,
+      pl: "+1200",
+      placedate: "2025-03-20",
+      matchdate: "2025-03-22",
+      details: "India vs England - India to win",
+    },
+    {
+      bettype: "Lay",
+      userprice: 1.8,
+      amount: 2000,
+      pl: "-800",
+      placedate: "2025-03-19",
+      matchdate: "2025-03-21",
+      details: "Australia vs South Africa - Australia to win",
+    },
+    {
+      bettype: "Back",
+      userprice: 3.2,
+      amount: 10000,
+      pl: "+3000",
+      placedate: "2025-03-21",
+      matchdate: "2025-03-23",
+      details: "Pakistan vs New Zealand - Pakistan to win",
+    },
+    {
+      bettype: "Lay",
+      userprice: 2.1,
+      amount: 3500,
+      pl: "-1500",
+      placedate: "2025-03-18",
+      matchdate: "2025-03-20",
+      details: "England vs Sri Lanka - England to win",
+    },
+    {
+      bettype: "Back",
+      userprice: 2.9,
+      amount: 1500,
+      pl: "+600",
+      placedate: "2025-03-17",
+      matchdate: "2025-03-19",
+      details: "West Indies vs Bangladesh - West Indies to win",
+    },
+  ];
 
   return (
-    <div className=" container  m-auto sm:w-full flex flex-col ">
-      <NavigationTable />
-      <Calendar />
-      <DataTable
-        columns={USER_MATCH_DETAILS_COL}
-        // rowKey={buttonTitle}
-        data={Data}
-        entriesPerPage={10}
-        // setEntriesPerPage={setEntriesPerPage}
-        // searchQuery={searchTerm}
-        // setSearchQuery={setSearchTerm}
-        // sortField={sortField}
-        // sortDirection={sortDirection}
-        // onSort={handleSort}
-        // currentPage={currentPage}
-        // totalPages={totalPages}
-        // goToPage={setCurrentPage}
-        // userTypeCode={userTypeCode}
-        // setIsNested={setIsNested}
-        // isNested={isNested}
-      />
-      <DataTable
-        columns={USER_MATCH_DETAILS_GAME_COL}
-        data={gameData}
-        entriesPerPage={10}
-      />
-      <DataTable
-        columns={USER_MATCH_DETAILS_GAMENAME_COL}
-        data={gameDetailsData}
-        entriesPerPage={10}
-      />
+    <div className="container m-auto sm:w-full flex flex-col">
+      {m && e && ma ? (
+        <div className=" flex w-full flex-col ">
+          <div className=" w-full flex justify-end mt-6 mb-1 ">
+            <div className=" w-fit flex gap-1 ">
+              <div className=" p-2 border border-black text-xs text-center bg-blue-400 font-semibold">
+                {" "}
+                <p>Back</p>
+              </div>
+              <div className=" p-2 text-xs text-center border border-black bg-red-300 font-semibold">
+                {" "}
+                <p>Lay</p>
+              </div>
+              <div className=" p-2 text-center text-xs border border-black bg-gray-200 font-semibold">
+                {" "}
+                <p>Void</p>
+              </div>
+            </div>
+          </div>
+          <div className=" w-full p-2 bg-blue-700 text-white font-bold text-sm ">
+            <p> Bets History</p>
+          </div>
+          <DataTable
+            columns={USER_BETS_DETAILS_COL}
+            data={betsData}
+            entriesPerPage={10}
+          />
+        </div>
+      ) : (
+        <>
+          <NavigationTable />
+          <Calendar />
+          {!m && !e && !ma && (
+            <DataTable
+              columns={USER_MATCH_DETAILS_COL}
+              data={Data}
+              entriesPerPage={10}
+            />
+          )}
+          {m && !e && !ma && (
+            <DataTable
+              columns={USER_MATCH_DETAILS_GAME_COL}
+              data={gameData}
+              entriesPerPage={10}
+            />
+          )}
+          {m && e && !ma && (
+            <DataTable
+              columns={USER_MATCH_DETAILS_GAMENAME_COL}
+              data={gameDetailsData}
+              entriesPerPage={10}
+            />
+          )}{" "}
+        </>
+      )}
     </div>
   );
 };

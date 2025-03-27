@@ -198,7 +198,7 @@ export const USER_MATCH_DETAILS_COL = [
   {
     key: "sportname",
     label: "Sport Name",
-    format: "eventname",
+    format: "sportname",
   },
   {
     key: "profitloss",
@@ -278,5 +278,40 @@ export const USER_MATCH_DETAILS_GAMENAME_COL = [
   },
 ];
 
-
-// export const 
+export const USER_BETS_DETAILS_COL = [
+  {
+    key: "bettype",
+    label: "Bet Type",
+    format: "bettype",
+  },
+  {
+    key: "userprice",
+    label: "User Price",
+    format: "bettype",
+  },
+  {
+    key: "amount",
+    label: "Amount",
+    format: "bettype",
+  },
+  {
+    key: "pl",
+    label: "PL",
+    format: "bettype",
+  },
+  {
+    key: "placedate",
+    label: "Place Date",
+    format: "bettype",
+  },
+  {
+    key: "matchdate",
+    label: "Match Date",
+    format: "bettype",
+  },
+  {
+    key: "details",
+    label: "Details",
+    format: "bettype",
+  },
+];
